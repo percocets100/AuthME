@@ -1,0 +1,37 @@
+# AuthME Configuration File
+# Secure authentication plugin for PocketMine-MP
+
+# PIN Settings
+min-pin-length: 4
+max-pin-length: 16
+
+# Authentication timeout (seconds)
+auth-timeout: 60
+
+# Maximum login attempts before kick
+max-attempts: 3
+
+# IP-based authentication (saves IP for 24 hours)
+ip-authentication: true
+
+# Messages
+messages:
+  welcome-new: "§eWelcome! Please set your PIN using: /setpin [PIN]"
+  welcome-returning: "§cPlease enter your PIN: /login [PIN]"
+  auth-success: "§aAuthentication successful! Welcome back!"
+  auth-ip-success: "§aAuthenticated via saved IP!"
+  pin-set: "§aPIN set successfully!"
+  incorrect-pin: "§cIncorrect PIN! Attempts remaining: {attempts}"
+  timeout: "§cAuthentication timeout!"
+  too-many-attempts: "§cToo many failed login attempts!"
+  must-auth: "§cPlease authenticate first with /login [PIN]"
+  pin-reset: "§cYour PIN has been reset by an administrator!"
+  
+# Features
+features:
+  freeze-on-login: true
+  hide-inventory: true  
+  block-commands: true
+  teleport-to-login-location: true
+  sound-effects: true
+  session-stealing-protection: true

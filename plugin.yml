@@ -1,0 +1,45 @@
+name: AuthME
+version: 1.0.0
+main: AuthME\Main
+api: 5.0.0
+author: YourName
+description: Advanced authentication plugin with PIN system
+
+permissions:
+  authme.setpin:
+    description: Set authentication PIN
+    default: true
+  authme.login:
+    description: Login with PIN
+    default: true
+  al.admin.resetpin:
+    description: Reset player PINs
+    default: op
+  al.admin.reload:
+    description: Reload plugin configuration
+    default: op
+  al.admin.setloc:
+    description: Set login location
+    default: op
+
+commands:
+  setpin:
+    description: Set your authentication PIN
+    usage: /setpin [PIN]
+    permission: authme.setpin
+  login:
+    description: Login with your PIN
+    usage: /login [PIN]
+    permission: authme.login
+  resetpin:
+    description: Reset a player's PIN
+    usage: /resetpin [Player]
+    permission: al.admin.resetpin
+  alreload:
+    description: Reload AuthME configuration
+    usage: /alreload
+    permission: al.admin.reload
+  setjoinloc:
+    description: Set the location players teleport to on login
+    usage: /setjoinloc
+    permission: al.admin.setloc
