@@ -35,15 +35,11 @@ class Main extends PluginBase implements Listener {
         $this->saveDefaultConfig();
         $this->config = $this->getConfig();
         
-        // Create data folder if it doesn't exist
         if (!is_dir($this->getDataFolder())) {
             mkdir($this->getDataFolder(), 0755, true);
         }
         
-        // Load player data
         $this->loadPlayerData();
-        
-        // Load login location if set
         $this->loadLoginLocation();
         
         $this->getLogger()->info("AuthME Plugin enabled successfully!");
@@ -103,38 +99,33 @@ class Main extends PluginBase implements Listener {
         $name = $player->getName();
         $ip = $player->getNetworkSession()->getIp();
         
-        // Check if player is registered
         if (!isset($this->playerPins[$name])) {
             $player->sendMessage("§eWelcome! Please set your PIN using: /setpin [PIN]");
             return;
         }
         
-        // Check IP authentication (daily)
         if (isset($this->playerIPs[$name]) && $this->playerIPs[$name]['ip'] === $ip) {
             $lastLogin = $this->playerIPs[$name]['time'] ?? 0;
-            if (time() - $lastLogin < 86400) { // 24 hours
+            if (time() - $lastLogin < 86400) {
                 $this->authenticatedPlayers[$name] = true;
                 $player->sendMessage("§aAuthenticated via saved IP!");
                 return;
             }
         }
         
-        // Freeze player and require PIN
         $this->frozenPlayers[$name] = true;
         $player->sendMessage("§cPlease enter your PIN: /login [PIN]");
         
-        // Teleport to login location if set
         if ($this->loginLocation !== null) {
             $player->teleport($this->loginLocation);
         }
         
-        // Auto-kick after timeout
         $this->getScheduler()->scheduleDelayedTask(new ClosureTask(function() use ($name): void {
             $player = $this->getServer()->getPlayerByPrefix($name);
             if ($player !== null && !$this->isAuthenticated($name)) {
                 $player->kick("§cAuthentication timeout!");
             }
-        }), 20 * 60); // 60 seconds
+        }), 20 * 60);
     }
     
     public function onPlayerQuit(PlayerQuitEvent $event): void {
@@ -225,7 +216,6 @@ class Main extends PluginBase implements Listener {
                 
                 $pin = $args[0];
                 
-                // Check rate limiting
                 if (!isset($this->loginAttempts[$name])) {
                     $this->loginAttempts[$name] = 0;
                 }
@@ -240,7 +230,6 @@ class Main extends PluginBase implements Listener {
                     unset($this->frozenPlayers[$name]);
                     unset($this->loginAttempts[$name]);
                     
-                    // Save IP for daily authentication
                     $this->playerIPs[$name] = [
                         'ip' => $sender->getNetworkSession()->getIp(),
                         'time' => time()
